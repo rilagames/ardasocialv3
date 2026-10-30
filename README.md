@@ -15,8 +15,12 @@ python3 -m http.server 4173 --bind 0.0.0.0
 
 ## Kontrol
 
-İlk açılışta Word penceresi görünür. Masaüstündeki projeler ve görev çubuğu düğmeleri pencereleri açar. Kapatma, küçültme, büyütme, masaüstünü gösterme ve Başlat menüsünü kontrol edin. Masaüstünde başlık çubuğundan sürükleyin; mobilde pencereler ekrana uyarlanır. Escape ön plandaki pencereyi kapatır. Hareket azaltma tercihi desteklenir.
+İlk açılışta Word penceresi görünür. Masaüstündeki projeler ve görev çubuğu düğmeleri pencereleri açar. Seçilmiş işler, Instagram esintili bir profil ve marka filtreleriyle görüntülenir; gönderiler arasında önceki/sonraki düğmeleriyle gezilir. Önceki tecrübelerim klasöründeki Appen.txt, Krombera.txt ve Fevreka.txt ayrı metin pencereleri açar; bu belgelerin içerikleri daha sonra eklenecek.
+
+Simgeler fareyle veya dokunarak sürüklenebilir; Alt + yön tuşlarıyla da taşınır. Konumlar yalnızca ziyaretçinin tarayıcısında, mobil ve masaüstü için ayrı saklanır. Tarayıcı depolamasına izin verilmezse sürükleme yine çalışır. Sağ tık veya bir simge üzerindeyken Shift + F10 menüyü açar. Menüde sıralama, yenileme, açma ve konum sıfırlama işlevlerini kontrol edin.
+
+Kapatma, küçültme, büyütme, masaüstünü gösterme ve Başlat menüsünü kontrol edin. Masaüstünde pencereleri başlık çubuğundan sürükleyin; mobilde pencereler ekrana uyarlanır. Escape önce sağ tık menüsünü veya Başlat menüsünü, ardından ön plandaki pencereyi kapatır. Hareket azaltma tercihi desteklenir.
 
 ## GitHub Pages
 
-`.github/workflows/pages.yml`, `main` dalına gönderim sonrası yalnızca site dosyalarını yayımlar. GitHub deposunda Settings → Pages → Source: GitHub Actions seçilmelidir. Tüm dosya yolları görecelidir; `/ardasocialv3/` altında çalışır. İlk GitHub bağlantıları sandbox tarafından engellendi. Desteklenen yetki yükseltmesiyle salt okunur erişim başarılı oldu; HEAD veya main dalı bulunmadı. Push veya yayın gerçekleştirilmedi.
+`.github/workflows/pages.yml`, `main` dalına gönderim sonrası yalnızca site dosyalarını yayımlar. GitHub deposunda Settings → Pages → Source: GitHub Actions seçilmelidir. Tüm dosya yolları görecelidir; `/ardasocialv3/` altında çalışır. GitHub ağ işlemleri sandbox nedeniyle desteklenen komut yetki yükseltmesini gerektirebilir. Canlı yayın durumu GitHub Actions sonucundan doğrulanmalıdır.
