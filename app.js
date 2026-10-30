@@ -22,16 +22,15 @@ const startButton = document.querySelector('#start-button');
 const contextMenu = document.querySelector('#context-menu');
 const experienceNames = ['Appen', 'Krombera', 'Fevreka'];
 const titles = {
-  about: 'Hakkımda.docx — Word', projects: 'Seçilmiş işler — Portfolyo',
+  about: 'Hakkımda.docx — Word', projects: 'Seçilmiş işler — Works',
   notes: 'Not defterim.txt — Not Defteri', skills: 'Neler yaparım.xlsx — Excel',
   experience: 'Önceki tecrübelerim — Dosya Gezgini',
   ...Object.fromEntries(experienceNames.map(name => [`experience-${name}`, `${name}.txt — Not Defteri`])),
 };
-const badges = {about:'W',projects:'◎',notes:'≡',skills:'X',experience:'▰'};
+const badges = {about:'W',projects:'W',notes:'≡',skills:'X',experience:'▰'};
 let topLayer = 10;
 let contextTarget = null;
 let contextReturnFocus = null;
-let activeBrand = 'Tümü';
 let desktopSnapshot = null;
 const suppressOpenUntil = new WeakMap();
 const positionKey = () => `arda-desktop-positions-v2-${innerWidth <= 760 ? 'mobile' : 'desktop'}`;
@@ -41,18 +40,35 @@ const clamp = (value, min, max) => Math.max(min, Math.min(Math.max(min, max), va
 canvas.insertAdjacentHTML('beforeend', projects.map(p => `<button class="desktop-icon project-icon" data-open="project-${p.id}"><img src="./assets/project-${p.id}.webp" alt="" draggable="false" width="61" height="66"><span>${p.title}</span></button>`).join(''));
 const icons = [...canvas.querySelectorAll('.desktop-icon')];
 
-function profileAvatar() {
-  return '<span class="profile-ring"><img src="./assets/arda.webp" alt="Arda Öztiryaki"></span>';
-}
-function projectGrid(brand) {
-  return projects.filter(p => brand === 'Tümü' || p.brand === brand).map(p => `<button class="social-post" data-open="project-${p.id}" aria-label="${p.title} — ${p.brand}"><img src="./assets/project-${p.id}.webp" alt="${p.title} — ${p.brand}" loading="lazy"><span class="post-overlay"><strong>${p.title}</strong><small>${p.brand} ↗</small></span></button>`).join('');
+function projectGrid() {
+  return projects.map(p => `<button class="social-post" data-open="project-${p.id}" aria-label="${p.title} — ${p.brand}"><img src="./assets/project-${p.id}.webp" alt="${p.title} — ${p.brand}" loading="lazy"><span class="post-overlay"><strong>${p.title}</strong><small>${p.brand} ↗</small></span></button>`).join('');
 }
 function portfolioContent() {
-  return `<div class="social-body"><header class="social-nav"><span class="social-logo">portfolio</span><span>SEÇİLMİŞ İŞLER</span></header><div class="social-profile">${profileAvatar()}<div><h2 class="social-handle">arda.oztiryaki</h2><div class="social-stats"><span><strong>${projects.length}</strong> gönderi</span><span><strong>${new Set(projects.map(p => p.brand)).size}</strong> marka</span></div><p class="social-bio"><strong>Arda Öztiryaki</strong><br>Sosyal medya uzmanı & metin yazarı<br>Fikirler, kelimeler ve marka hikâyeleri.</p></div></div><nav class="brand-filters" aria-label="Markaya göre filtrele">${['Tümü', ...new Set(projects.map(p => p.brand))].map(brand => `<button data-brand="${brand}" aria-pressed="${brand === activeBrand}">${brand}</button>`).join('')}</nav><div class="social-grid-label"><span aria-hidden="true">▦</span> GÖNDERİLER</div><div class="social-grid">${projectGrid(activeBrand)}</div><p class="social-footnote">Portfolyodan seçkiler · Arda Öztiryaki</p></div>`;
+  return `<div class="social-body"><div class="social-grid-label"><span aria-hidden="true">▦</span> SEÇİLMİŞ İŞLER</div><div class="social-grid">${projectGrid()}</div></div>`;
 }
 function projectContent(project) {
   const index = projects.indexOf(project);
-  return `<div class="social-body"><header class="social-post-header">${profileAvatar()}<div><strong>arda.oztiryaki</strong><small>${project.brand} · Portfolyo çalışması</small></div><span class="post-position">${index + 1} / ${projects.length}</span></header><img class="social-post-image" src="./assets/project-${project.id}.webp" alt="${project.brand}: ${project.title}"><div class="social-post-details"><div class="social-post-controls"><span>${project.kind}</span><div class="post-navigation"><button data-project-step="-1" aria-label="Önceki çalışma">‹</button><button data-project-step="1" aria-label="Sonraki çalışma">›</button></div></div><p><strong>${project.title}</strong><br>${project.description}</p><button class="doc-cta" data-open="projects">← Tüm gönderiler</button></div></div>`;
+  return `<div class="social-body"><header class="works-detail-header"><button data-portfolio-back aria-label="Seçilmiş işlere geri dön">← Geri</button><span>${project.title}</span><small>${index + 1} / ${projects.length}</small></header><img class="social-post-image" src="./assets/project-${project.id}.webp" alt="${project.brand}: ${project.title}"><div class="social-post-details"><div class="social-post-controls"><span>${project.brand}</span><div class="post-navigation"><button data-project-step="-1" aria-label="Önceki çalışma">‹</button><button data-project-step="1" aria-label="Sonraki çalışma">›</button></div></div><p><strong>${project.title}</strong><br>${project.description}</p></div></div>`;
+}
+function showPortfolioView(win, projectId = null) {
+  const body = win.querySelector('.social-body');
+  const wasDetail = Boolean(win.dataset.projectId);
+  if (projectId !== null) {
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+    if (!wasDetail) win.dataset.feedScroll = body.scrollTop;
+    win.dataset.projectId = projectId;
+    body.outerHTML = projectContent(project);
+    win.querySelector('[data-portfolio-back]').focus({preventScroll:true});
+  } else {
+    const previousId = win.dataset.projectId;
+    delete win.dataset.projectId;
+    if (wasDetail) {
+      body.outerHTML = portfolioContent();
+      win.querySelector('.social-body').scrollTop = Number(win.dataset.feedScroll) || 0;
+      win.querySelector(`[data-open="project-${previousId}"]`)?.focus({preventScroll:true});
+    }
+  }
 }
 function contentFor(id) {
   if (id === 'about') return aboutContent();
@@ -67,24 +83,14 @@ function contentFor(id) {
   return projectContent(projects.find(p => id === `project-${p.id}`));
 }
 
-function updateTaskbar() {
-  const top = [...openWindows.values()].filter(w => !w.hidden).sort((a,b) => Number(b.style.zIndex) - Number(a.style.zIndex))[0];
-  document.querySelectorAll('.taskbar [data-open]').forEach(button => {
-    const id = button.dataset.open;
-    const family = w => w.dataset.id === id || (id === 'projects' && w.dataset.id.startsWith('project-')) || (id === 'experience' && w.dataset.id.startsWith('experience-'));
-    button.classList.toggle('running', [...openWindows.values()].some(family));
-    button.classList.toggle('current', Boolean(top && family(top)));
-  });
-}
 function focusWindow(win) {
   win.style.zIndex = ++topLayer;
   openWindows.forEach(w => w.classList.toggle('active', w === win && !w.hidden));
-  updateTaskbar();
 }
 function focusRemainingWindow() {
   const top = [...openWindows.values()].filter(w => !w.hidden).sort((a,b) => Number(b.style.zIndex) - Number(a.style.zIndex))[0];
   if (top) { focusWindow(top); top.querySelector('.close').focus({preventScroll:true}); }
-  else { updateTaskbar(); startButton.focus({preventScroll:true}); }
+  else { startButton.focus({preventScroll:true}); }
 }
 function closeWindow(id) {
   const win = openWindows.get(id);
@@ -95,23 +101,26 @@ function setWindowPosition(win, x, y) {
   win.dataset.x = x; win.dataset.y = y;
   win.style.transform = `translate(${x}px,${y}px)`;
 }
-function openWindow(id) {
+function openWindow(id, projectId = null) {
   const project = projects.find(p => id === `project-${p.id}`);
-  if (!titles[id] && !project) return;
+  if (project) return openWindow('projects', project.id);
+  if (!titles[id]) return;
   toggleStart(false); closeContext(); desktopSnapshot = null;
   if (openWindows.has(id)) {
     const win = openWindows.get(id); win.hidden = false; focusWindow(win);
-    win.querySelector('.close').focus({preventScroll:true}); return;
+    if (id === 'projects') showPortfolioView(win, projectId);
+    if (projectId === null) win.querySelector('.close').focus({preventScroll:true});
+    return win;
   }
-  const title = titles[id] || `${project.title} — ${project.brand}`;
+  const title = titles[id];
   const win = document.createElement('section');
-  win.className = `window${id === 'projects' || project ? ' social-window' : ''}`;
+  win.className = `window${id === 'projects' ? ' social-window' : ''}`;
   win.dataset.id = id; win.setAttribute('role','dialog'); win.setAttribute('aria-label',title);
   const offset = openWindows.size % 5 * 22;
   const width = innerWidth > 1600 ? 760 : innerWidth <= 1000 ? 590 : 690;
   const x = clamp((innerWidth > 1100 ? 145 : 35) + offset, 0, desktop.clientWidth - width);
   setWindowPosition(win, x, offset);
-  win.innerHTML = `<div class="titlebar"><div class="title-label"><span class="mini-word">${badges[id] || (project ? '◎' : '≡')}</span><span>${title}</span></div><div class="window-actions"><button data-action="minimize" aria-label="Küçült">−</button><button data-action="maximize" aria-label="Büyüt" aria-pressed="false">□</button><button data-action="close" class="close" aria-label="Kapat">×</button></div></div>${contentFor(id)}`;
+  win.innerHTML = `<div class="titlebar"><div class="title-label">${id === 'projects' ? '<img class="title-works-icon" src="./assets/works.svg" alt="" width="18" height="18">' : `<span class="mini-word">${badges[id] || '≡'}</span>`}<span>${title}</span></div><div class="window-actions"><button data-action="minimize" aria-label="Küçült">−</button><button data-action="maximize" aria-label="Büyüt" aria-pressed="false">□</button><button data-action="close" class="close" aria-label="Kapat">×</button></div></div>${contentFor(id)}`;
   windowHost.append(win); openWindows.set(id,win); focusWindow(win);
   win.addEventListener('pointerdown', () => focusWindow(win));
   win.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => {
@@ -132,7 +141,9 @@ function openWindow(id) {
     const stop = () => { bar.removeEventListener('pointermove',move); bar.removeEventListener('pointerup',stop); bar.removeEventListener('pointercancel',stop); };
     bar.addEventListener('pointermove',move); bar.addEventListener('pointerup',stop); bar.addEventListener('pointercancel',stop);
   });
-  win.querySelector('.close').focus({preventScroll:true});
+  if (id === 'projects' && projectId !== null) showPortfolioView(win, projectId);
+  else win.querySelector('.close').focus({preventScroll:true});
+  return win;
 }
 
 function readPositions() {
@@ -236,7 +247,7 @@ function showDesktop() {
     desktopSnapshot=new Map([...openWindows].map(([id,win]) => [id,win.hidden]));
     openWindows.forEach(win => {win.hidden=true;});
   }
-  toggleStart(false);closeContext();updateTaskbar();
+  toggleStart(false);closeContext();
 }
 contextMenu.addEventListener('click', e => {
   const action=e.target.closest('[data-context]')?.dataset.context;if(!action)return;
@@ -264,7 +275,25 @@ desktop.addEventListener('contextmenu', e => {
   if(e.target.closest('.window'))return;
   e.preventDefault();showContext(e.clientX,e.clientY,e.target.closest('.desktop-icon'));
 });
-document.addEventListener('pointerdown', e => {if(!e.target.closest('#context-menu'))closeContext();});
+document.addEventListener('pointerdown', e => {
+  if (!e.target.closest('#context-menu')) closeContext();
+  if (!e.target.closest('.paper')) window.getSelection()?.removeAllRanges();
+});
+document.addEventListener('selectstart', e => {
+  const element = e.target.nodeType === Node.ELEMENT_NODE ? e.target : e.target.parentElement;
+  if (!element?.closest('.paper')) e.preventDefault();
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+    e.preventDefault();
+    const paper = document.querySelector('.window.active[data-id="about"]:not([hidden]) .paper');
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    if (paper && selection) {
+      const range = document.createRange(); range.selectNodeContents(paper); selection.addRange(range);
+    }
+  }
+});
 function toggleStart(state) { menu.hidden=state===undefined?!menu.hidden:!state;startButton.setAttribute('aria-expanded',String(!menu.hidden)); }
 startButton.addEventListener('click', () => {closeContext();toggleStart();});
 document.addEventListener('click', e => {
@@ -272,19 +301,14 @@ document.addEventListener('click', e => {
   if(trigger && !(trigger.classList.contains('desktop-icon') && performance.now()<(suppressOpenUntil.get(trigger)||0)))openWindow(trigger.dataset.open);
   if(!e.target.closest('#start-menu, #start-button'))toggleStart(false);
   if(e.target.closest('#desktop-icons') && !e.target.closest('.desktop-icon'))selectIcon(null);
-  const filter=e.target.closest('[data-brand]');
-  if(filter) {
-    activeBrand=filter.dataset.brand;
-    const win=filter.closest('.window');
-    win.querySelector('.social-grid').innerHTML=projectGrid(activeBrand);
-    win.querySelectorAll('[data-brand]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.brand===activeBrand)));
-  }
-  const step=e.target.closest('[data-project-step]');
-  if(step) {
-    const id=step.closest('.window').dataset.id;
-    const index=projects.findIndex(p=>id===`project-${p.id}`);
-    const next=projects[(index+Number(step.dataset.projectStep)+projects.length)%projects.length];
-    closeWindow(id);openWindow(`project-${next.id}`);
+  const back = e.target.closest('[data-portfolio-back]');
+  if (back) showPortfolioView(back.closest('.window'));
+  const step = e.target.closest('[data-project-step]');
+  if (step) {
+    const win = step.closest('.window');
+    const index = projects.findIndex(p => p.id === Number(win.dataset.projectId));
+    const next = projects[(index + Number(step.dataset.projectStep) + projects.length) % projects.length];
+    showPortfolioView(win, next.id);
   }
 });
 document.querySelector('#reset-desktop').addEventListener('click', () => {
@@ -296,7 +320,8 @@ document.addEventListener('keydown', e => {
   if(!contextMenu.hidden){e.preventDefault();closeContext(true);return;}
   if(!menu.hidden){toggleStart(false);startButton.focus();return;}
   const top=[...openWindows.values()].filter(w=>!w.hidden).sort((a,b)=>Number(b.style.zIndex)-Number(a.style.zIndex))[0];
-  if(top)closeWindow(top.dataset.id);
+  if (top?.dataset.projectId) showPortfolioView(top);
+  else if (top) closeWindow(top.dataset.id);
 });
 function tick() {
   const now=new Date();

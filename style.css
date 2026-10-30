@@ -118,3 +118,45 @@
   .explorer-toolbar{padding:12px 16px;font-size:10px;gap:9px}.explorer-body{padding:22px 15px}
   .experience-heading h2{font-size:20px}.file-list-head{grid-template-columns:1fr 78px}.experience-file{grid-template-columns:29px 1fr 78px;gap:8px;padding:16px 8px}.experience-file>small{font-size:9px}.experience-document{padding:24px}
 }
+
+/* Native-desktop selection: only the Word document exposes selectable text. */
+*,*::before,*::after{-webkit-user-select:none;user-select:none}
+.paper,.paper *{-webkit-user-select:text;user-select:text}
+.paper button,.paper button *{-webkit-user-select:none;user-select:none}
+.paper ::selection{background:#b8d4f4;color:#183b5c}
+img{-webkit-user-drag:none}
+.works-icon{width:45px;height:45px;margin:3px 0 7px;filter:drop-shadow(0 3px 5px #203f3625);flex-shrink:0}
+.works-icon.small{width:33px;height:33px;margin:0}
+.title-works-icon{width:18px;height:18px;border-radius:4px;display:block}
+.social-grid-label{position:sticky;top:0;z-index:1;background:#ffffffed;backdrop-filter:blur(14px);border-top:0;border-bottom:1px solid #eef0ec;padding:18px 12px;letter-spacing:1.6px;font-size:10px}
+.works-detail-header{display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:1;background:#fffffff2;backdrop-filter:blur(14px);padding:14px 18px;border-bottom:1px solid #edf0eb;min-height:54px}
+.works-detail-header>button{display:flex;align-items:center;flex-shrink:0;background:#eff3ed;color:#48604b;padding:8px 10px;border-radius:4px;font-size:11px}
+.works-detail-header>span{font-size:12px;color:#657668;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.works-detail-header>small{font-size:10px;letter-spacing:.5px;color:#97a093;white-space:nowrap}
+
+/* Fixed social shortcuts, with Start at the far right. */
+.taskbar{justify-content:space-between;padding-left:20px}
+.taskbar nav.social-links{height:100%;display:flex;align-items:center;gap:3px;margin:0}
+.social-links a{width:45px;height:46px;display:grid;place-items:center;border-radius:5px;text-decoration:none;transition:background .15s}
+.social-links a:hover{background:#ffffffb0}
+.linkedin-icon{width:28px;height:28px;border-radius:4px;background:#1673a4;color:white;display:grid;place-items:center;font-family:Arial,sans-serif;font-size:23px;font-weight:700;letter-spacing:-1px;line-height:1;padding-top:2px;box-shadow:0 2px 4px #35667a18}
+.mail-icon{height:28px;width:32px;filter:drop-shadow(0 2px 3px #35667a15)}
+.taskbar-system{display:flex;align-items:center;height:100%;gap:10px}
+.taskbar-system .tray{position:static;gap:20px;height:100%}
+.taskbar-system .tray>button{width:7px}
+#start-button{display:grid;place-items:center;width:58px;height:100%;background:none;border-left:1px solid #ced7d0;border-radius:0;flex-shrink:0}
+#start-button:hover,#start-button[aria-expanded="true"]{background:#ffffffa3}
+#start-menu{left:auto;right:12px;transform:none}
+@media(max-width:760px){
+  .taskbar{padding-left:10px}
+  .taskbar nav.social-links{margin:0;gap:0}
+  .social-links a{width:40px;height:45px}
+  .taskbar-system{gap:5px}
+  .taskbar-system .tray{gap:0}
+  .taskbar-system .tray>div{padding-right:10px}
+  #start-button{width:47px}
+  #start-menu{right:8px}
+  .works-detail-header{gap:12px;padding:12px 14px}
+  .works-detail-header>span{font-size:11px}
+  .works-detail-header>button{font-size:10px;padding:8px}
+}
