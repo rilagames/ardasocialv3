@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d8dedb">
+  <meta name="description" content="Arda Öztiryaki — Sosyal medya, yaratıcı fikirler ve metinler. İnteraktif portfolyo masaüstü.">
+  <title>Arda Öztiryaki — Yaratıcı masaüstü</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="wallpaper" aria-hidden="true"><img src="./assets/arda.webp" alt=""></div>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="desktop-heading"><span>ARDA ÖZTİRYAKİ</span><span>Sosyal medya uzmanı & metin yazarı</span></header>
+  <main id="desktop" aria-label="Portfolyo masaüstü">
+    <nav class="shortcuts" aria-label="Masaüstü dosyaları">
+      <button class="desktop-icon" data-open="about"><span class="file-icon word-file">W<span>≡</span></span><span>Hakkımda.docx</span></button>
+      <button class="desktop-icon" data-open="projects"><span class="folder-icon"></span><span>Seçilmiş işler</span></button>
+      <button class="desktop-icon" data-open="notes"><span class="file-icon note-file">Aa<span>≡</span></span><span>Not defterim.txt</span></button>
+      <button class="desktop-icon" data-open="skills"><span class="file-icon excel-file">X<span>▦</span></span><span>Neler yaparım.xlsx</span></button>
+    </nav>
+    <section class="project-desktop" id="project-desktop" aria-label="Seçilmiş proje kısayolları"></section>
+    <div class="desktop-caption" aria-hidden="true"><span>Fikirler burada yaşar.</span><small>Bir dosya aç. Bir hikâye keşfet.</small></div>
+    <div id="windows"></div>
+  </main>
+  <aside id="start-menu" aria-label="Başlat menüsü" hidden>
+    <div class="start-top"><span class="avatar">AÖ</span><div><strong>Arda Öztiryaki</strong><small>Yaratıcı masaüstüme hoş geldin.</small></div></div>
+    <p>SABİTLENENLER</p>
+    <div class="start-apps"><button data-open="about"><span class="app-tile word">W</span>Hakkımda</button><button data-open="projects"><span class="app-tile folder">▰</span>Projeler</button><button data-open="notes"><span class="app-tile notes">≡</span>Notlar</button><button data-open="skills"><span class="app-tile excel">X</span>Yetenekler</button></div>
+    <footer><span>Her şey bir fikirle başlar.</span><button id="reset-desktop" aria-label="Masaüstünü sıfırla" title="Masaüstünü sıfırla">↻</button></footer>
+  </aside>
+  <footer class="taskbar">
+    <div class="taskbar-left"><span class="status-dot"></span><span>Yaratıcı mod açık</span></div>
+    <nav aria-label="Görev çubuğu"><button id="start-button" aria-label="Başlat" aria-expanded="false"><span class="windows-logo"><i></i><i></i><i></i><i></i></span></button><button data-open="projects" aria-label="Projeler"><span class="task-folder">▰</span></button><button data-open="about" aria-label="Hakkımda belgesi"><span class="app-tile word">W</span></button><button data-open="notes" aria-label="Not defteri"><span class="app-tile notes">≡</span></button><span class="task-separator"></span><button data-open="skills" aria-label="Yetenekler"><span class="app-tile excel">X</span></button></nav>
+    <div class="tray"><span class="tray-language">TR</span><div><time id="clock"></time><time id="date"></time></div><button id="show-desktop" aria-label="Masaüstünü göster" title="Masaüstünü göster"></button></div>
+  </footer>
+  <noscript><div class="no-script">Bu interaktif portfolyoyu gezmek için JavaScript’i etkinleştirin. Arda Öztiryaki — Sosyal medya uzmanı & metin yazarı.</div></noscript>
+</body>
+</html>
