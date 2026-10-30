@@ -196,6 +196,48 @@ function layoutIcons({reset=false,sort=false}={}) {
   if (reset) savePositions();
 }
 function selectIcon(icon) { icons.forEach(item => item.classList.toggle('selected', item === icon)); }
+let marqueeGesture = null;
+let suppressSelectionClickUntil = 0;
+let suppressSelectionContextUntil = 0;
+canvas.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse' || ![0,2].includes(e.button) || e.target.closest('.desktop-icon') || marqueeGesture) return;
+  closeContext(); toggleStart(false); selectIcon(null);
+  const rect = canvas.getBoundingClientRect();
+  const point = event => ({x:clamp(event.clientX-rect.left,0,canvas.clientWidth),y:clamp(event.clientY-rect.top,0,canvas.clientHeight)});
+  const start = point(e);
+  const box = document.createElement('div');
+  box.className = 'desktop-selection'; box.setAttribute('aria-hidden','true'); box.hidden = true;
+  canvas.append(box); canvas.setPointerCapture(e.pointerId);
+  let moved = false;
+  const move = event => {
+    const end = point(event);
+    if (!moved && Math.hypot(end.x-start.x,end.y-start.y)<5) return;
+    moved = true; box.hidden = false;
+    const left=Math.min(start.x,end.x),top=Math.min(start.y,end.y),right=Math.max(start.x,end.x),bottom=Math.max(start.y,end.y);
+    Object.assign(box.style,{left:`${left}px`,top:`${top}px`,width:`${right-left}px`,height:`${bottom-top}px`});
+    icons.forEach(icon => {
+      const x=Number(icon.dataset.x),y=Number(icon.dataset.y);
+      icon.classList.toggle('selected',x<right&&x+icon.offsetWidth>left&&y<bottom&&y+icon.offsetHeight>top);
+    });
+  };
+  const stop = event => {
+    canvas.removeEventListener('pointermove',move); canvas.removeEventListener('pointerup',stop);
+    canvas.removeEventListener('pointercancel',cancel); canvas.removeEventListener('lostpointercapture',cancel);
+    box.remove(); marqueeGesture = null;
+    if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+    const canceled = !event || event.type !== 'pointerup';
+    if (canceled) selectIcon(null);
+    if (moved) suppressSelectionClickUntil = performance.now()+400;
+    if (e.button === 2) {
+      suppressSelectionContextUntil = performance.now()+400;
+      if (!moved && !canceled) showContext(event.clientX,event.clientY);
+    }
+  };
+  const cancel = () => stop(null);
+  marqueeGesture = {cancel};
+  canvas.addEventListener('pointermove',move); canvas.addEventListener('pointerup',stop);
+  canvas.addEventListener('pointercancel',cancel); canvas.addEventListener('lostpointercapture',cancel);
+});
 icons.forEach(icon => {
   icon.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
@@ -278,6 +320,7 @@ contextMenu.addEventListener('keydown', e => {
 });
 desktop.addEventListener('contextmenu', e => {
   if(e.target.closest('.window'))return;
+  if (marqueeGesture || performance.now()<suppressSelectionContextUntil) {e.preventDefault();return;}
   e.preventDefault();showContext(e.clientX,e.clientY,e.target.closest('.desktop-icon'));
 });
 document.addEventListener('pointerdown', e => {
@@ -302,6 +345,7 @@ document.addEventListener('keydown', e => {
 function toggleStart(state) { menu.hidden=state===undefined?!menu.hidden:!state;startButton.setAttribute('aria-expanded',String(!menu.hidden)); }
 startButton.addEventListener('click', () => {closeContext();toggleStart();});
 document.addEventListener('click', e => {
+  if (e.target.closest('#desktop-icons') && performance.now()<suppressSelectionClickUntil) {e.preventDefault();return;}
   const trigger=e.target.closest('[data-open]');
   if(trigger && !(trigger.classList.contains('desktop-icon') && performance.now()<(suppressOpenUntil.get(trigger)||0)))openWindow(trigger.dataset.open);
   if(!e.target.closest('#start-menu, #start-button'))toggleStart(false);
@@ -322,6 +366,7 @@ document.querySelector('#reset-desktop').addEventListener('click', () => {
 document.querySelector('#show-desktop').addEventListener('click',showDesktop);
 document.addEventListener('keydown', e => {
   if(e.key!=='Escape')return;
+  if(marqueeGesture){e.preventDefault();marqueeGesture.cancel();return;}
   if(!contextMenu.hidden){e.preventDefault();closeContext(true);return;}
   if(!menu.hidden){toggleStart(false);startButton.focus();return;}
   const top=[...openWindows.values()].filter(w=>!w.hidden).sort((a,b)=>Number(b.style.zIndex)-Number(a.style.zIndex))[0];
@@ -334,8 +379,10 @@ function tick() {
   document.querySelector('#date').textContent=new Intl.DateTimeFormat('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(now);
 }
 window.addEventListener('resize', () => {
+  marqueeGesture?.cancel();
   closeContext();layoutIcons();
   if(innerWidth<=760)return;
   openWindows.forEach(win => setWindowPosition(win,clamp(Number(win.dataset.x),0,desktop.clientWidth-win.offsetWidth),clamp(Number(win.dataset.y),-65,desktop.clientHeight-60)));
 });
+window.addEventListener('blur', () => marqueeGesture?.cancel());
 layoutIcons();tick();setInterval(tick,15000);openWindow('about');

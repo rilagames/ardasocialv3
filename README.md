@@ -21,6 +21,8 @@ Görev çubuğunda açık uygulamalar yerine ortada sabit Instagram, LinkedIn ve
 
 Simgeler fareyle veya dokunarak sürüklenebilir; Alt + yön tuşlarıyla da taşınır. Konumlar yalnızca ziyaretçinin tarayıcısında, mobil ve masaüstü için ayrı saklanır. Tarayıcı depolamasına izin verilmezse sürükleme yine çalışır. Sağ tık veya bir simge üzerindeyken Shift + F10 menüyü açar. Menüde sıralama, yenileme, açma ve konum sıfırlama işlevlerini kontrol edin.
 
+Masaüstündeki boş alanda sol veya sağ fare tuşuyla sürüklemek Windows tarzı mavi seçim kutusu gösterir. İçindeki simgelerin vurgusu yalnızca görseldir; toplu açma veya toplu taşıma yapmaz. Tuş bırakılınca kutu kalkar, Escape sürüklemeyi iptal eder. Sürüklenmeden yapılan normal sağ tıklama menüyü açar. Dokunmatik kaydırma bu seçim hareketine dönüştürülmez.
+
 Kapatma, küçültme, büyütme, masaüstünü gösterme ve Başlat menüsünü kontrol edin. Masaüstünde pencereleri başlık çubuğundan sürükleyin; mobilde pencereler ekrana uyarlanır. Escape önce sağ tık menüsünü veya Başlat menüsünü kapatır; Works detayındayken listeye döner, diğer durumlarda ön plandaki pencereyi kapatır. Metin seçme ve Ctrl/Cmd+A yalnızca Word belgesinin içinde çalışır. Hareket azaltma tercihi desteklenir.
 
 ## GitHub Pages
