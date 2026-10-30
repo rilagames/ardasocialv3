@@ -83,6 +83,11 @@ function contentFor(id) {
   return projectContent(projects.find(p => id === `project-${p.id}`));
 }
 
+function windowIcon(id) {
+  const app = {about:'word',skills:'excel',projects:'works'}[id];
+  if (app) return `<img class="${app === 'works' ? 'title-works-icon' : 'title-office-icon'}" src="./assets/${app}.svg" alt="" width="20" height="20">`;
+  return `<span class="mini-word">${badges[id] || '≡'}</span>`;
+}
 function focusWindow(win) {
   win.style.zIndex = ++topLayer;
   openWindows.forEach(w => w.classList.toggle('active', w === win && !w.hidden));
@@ -120,7 +125,7 @@ function openWindow(id, projectId = null) {
   const width = innerWidth > 1600 ? 760 : innerWidth <= 1000 ? 590 : 690;
   const x = clamp((innerWidth > 1100 ? 145 : 35) + offset, 0, desktop.clientWidth - width);
   setWindowPosition(win, x, offset);
-  win.innerHTML = `<div class="titlebar"><div class="title-label">${id === 'projects' ? '<img class="title-works-icon" src="./assets/works.svg" alt="" width="18" height="18">' : `<span class="mini-word">${badges[id] || '≡'}</span>`}<span>${title}</span></div><div class="window-actions"><button data-action="minimize" aria-label="Küçült">−</button><button data-action="maximize" aria-label="Büyüt" aria-pressed="false">□</button><button data-action="close" class="close" aria-label="Kapat">×</button></div></div>${contentFor(id)}`;
+  win.innerHTML = `<div class="titlebar"><div class="title-label">${windowIcon(id)}<span>${title}</span></div><div class="window-actions"><button data-action="minimize" aria-label="Küçült">−</button><button data-action="maximize" aria-label="Büyüt" aria-pressed="false">□</button><button data-action="close" class="close" aria-label="Kapat">×</button></div></div>${contentFor(id)}`;
   windowHost.append(win); openWindows.set(id,win); focusWindow(win);
   win.addEventListener('pointerdown', () => focusWindow(win));
   win.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => {

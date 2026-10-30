@@ -160,3 +160,22 @@ img{-webkit-user-drag:none}
   .works-detail-header>span{font-size:11px}
   .works-detail-header>button{font-size:10px;padding:8px}
 }
+
+/* Classic taskbar alignment: Start left, social shortcuts centered. */
+.taskbar{padding-left:0}
+#start-button{position:absolute;left:0;top:0;border-left:0;border-right:1px solid #ced7d0}
+.taskbar nav.social-links{position:absolute;left:50%;top:0;transform:translateX(-50%)}
+.taskbar-system{margin-left:auto}
+#start-menu{left:12px;right:auto}
+.office-icon{width:48px;height:48px;object-fit:contain;display:block;margin:2px 0 5px;flex-shrink:0;filter:drop-shadow(0 2px 3px #213b3720)}
+.office-icon.small{width:33px;height:33px;margin:0;filter:none}
+.title-office-icon{width:20px;height:20px;display:block;object-fit:contain}
+.works-icon{width:60px;height:45px;object-fit:contain}
+.works-icon.small{width:44px;height:33px}
+.title-works-icon{width:28px;height:21px;border-radius:0;object-fit:contain}
+@media(max-width:760px){
+  .taskbar{padding-left:0}
+  #start-menu{left:8px;right:auto}
+  .social-links a{width:36px}
+  .taskbar-system .tray>div{padding-right:5px;font-size:9px}
+}

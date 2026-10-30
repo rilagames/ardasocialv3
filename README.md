@@ -15,9 +15,9 @@ python3 -m http.server 4173 --bind 0.0.0.0
 
 ## Kontrol
 
-İlk açılışta Word penceresi görünür. Pencereler masaüstü simgeleri ve sağ uçtaki Başlat menüsünden açılır. Works (Seçilmiş işler), profil veya kategori içermeyen bir gönderi ızgarasıyla başlar. Gönderiye tıklanınca aynı Works penceresinde detay açılır; Geri düğmesi listeye, önceki kaydırma konumuna döner. Önceki/sonraki düğmeleri de aynı pencerede çalışır. Masaüstündeki post kısayolları bu ortak Works penceresine yönlendirilir.
+İlk açılışta Word penceresi görünür. Pencereler masaüstü simgeleri ve sol uçtaki Başlat menüsünden açılır. Works (Seçilmiş işler), profil veya kategori içermeyen bir gönderi ızgarasıyla başlar. Gönderiye tıklanınca aynı Works penceresinde detay açılır; Geri düğmesi listeye, önceki kaydırma konumuna döner. Önceki/sonraki düğmeleri de aynı pencerede çalışır. Masaüstündeki post kısayolları bu ortak Works penceresine yönlendirilir.
 
-Görev çubuğunda açık uygulamalar yerine sabit Instagram, LinkedIn ve e-posta bağlantıları yer alır. Sosyal profiller yeni sekmede, e-posta `mailto:ardaoztiryaki@gmail.com` ile açılır. Küçültülen pencereler ilgili masaüstü simgesi veya Başlat menüsü üzerinden geri getirilir. Önceki tecrübelerim klasöründeki Appen.txt, Krombera.txt ve Fevreka.txt ayrı metin pencereleri açar; bu belgelerin içerikleri daha sonra eklenecek.
+Görev çubuğunda açık uygulamalar yerine ortada sabit Instagram, LinkedIn ve e-posta bağlantıları yer alır. Sosyal profiller yeni sekmede, e-posta `mailto:ardaoztiryaki@gmail.com` ile açılır. Küçültülen pencereler ilgili masaüstü simgesi veya Başlat menüsü üzerinden geri getirilir. Önceki tecrübelerim klasöründeki Appen.txt, Krombera.txt ve Fevreka.txt ayrı metin pencereleri açar; bu belgelerin içerikleri daha sonra eklenecek.
 
 Simgeler fareyle veya dokunarak sürüklenebilir; Alt + yön tuşlarıyla da taşınır. Konumlar yalnızca ziyaretçinin tarayıcısında, mobil ve masaüstü için ayrı saklanır. Tarayıcı depolamasına izin verilmezse sürükleme yine çalışır. Sağ tık veya bir simge üzerindeyken Shift + F10 menüyü açar. Menüde sıralama, yenileme, açma ve konum sıfırlama işlevlerini kontrol edin.
 
